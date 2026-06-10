@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>MOVA — Rentabilité Immobilière</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Mono:wght@400;500&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--noir:#0a0a0a;--blanc:#f5f3ee;--or:#c9a84c;--gris:#1e1e1e;--gris2:#2c2c2c;--gris3:#3a3a3a;--dim:#888;--mid:#bbb;--vert:#4caf7d;--rouge:#e05a5a;--bleu:#5a9ce0;--r:6px}
+body{background:var(--noir);color:var(--blanc);font-family:'Sora',sans-serif;min-height:100vh}
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:18px 32px;border-bottom:1px solid #1a1a1a}
+.logo{font-family:'DM Serif Display',serif;font-size:26px;color:var(--or);letter-spacing:2px}
+.logo span{color:var(--blanc);font-size:13px;font-weight:300;margin-left:10px;opacity:.5}
+.bp{background:var(--or);color:var(--noir);border:none;border-radius:var(--r);padding:9px 20px;font-family:'Sora',sans-serif;font-size:12px;font-weight:600;cursor:pointer;letter-spacing:1px;text-transform:uppercase}
+.bp:hover{opacity:.85}
+.bs{background:none;border:1px solid var(--gris3);color:var(--mid);border-radius:var(--r);padding:9px 18px;font-family:'Sora',sans-serif;font-size:12px;cursor:pointer;letter-spacing:1px;text-transform:uppercase}
+.bs:hover{border-color:var(--mid);color:var(--blanc)}
+.dash{padding:32px;max-width:1500px;margin:0 auto}
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-bottom:32px}
+.kpi{background:var(--gris);border:1px solid var(--gris3);border-radius:var(--r);padding:20px}
+.kl{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--dim);margin-bottom:6px}
+.kv{font-family:'DM Mono',monospace;font-size:20px;font-weight:500;color:var(--or)}
+.ks{font-size:11px;color:var(--dim);margin-top:4px}
+.kdiv{border-top:1px solid var(--gris3);margin:8px 0;padding-top:8px}
+.kls{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:2px}
+.kvs{font-family:'DM Mono',monospace;font-size:17px;font-weight:500}
+.tw{background:var(--gris);border:1px solid var(--gris3);border-radius:var(--r);overflow:hidden}
+.th2{padding:16px 20px;border-bottom:1px solid var(--gris3);font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--dim)}
+.tscroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{padding:10px 11px;text-align:left;font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--dim);border-bottom:1px solid var(--gris3);font-weight:500;white-space:nowrap}
+td{padding:11px;font-size:12px;border-bottom:1px solid #1a1a1a}
+tbody tr{cursor:pointer;transition:background .15s}
+tbody tr:hover{background:var(--gris2)}
+.badge{display:inline-block;padding:3px 8px;border-radius:3px;font-size:9px;text-transform:uppercase;letter-spacing:1px;font-weight:600}
+.bo{background:rgba(90,156,224,.15);color:var(--bleu)}
+.ba{background:rgba(76,175,125,.15);color:var(--vert)}
+.br{background:rgba(224,90,90,.15);color:var(--rouge)}
+.bs2{background:rgba(201,168,76,.15);color:var(--or)}
+.mono{font-family:'DM Mono',monospace}
+.cor{color:var(--or)}.cv{color:var(--vert)}.cr{color:var(--rouge)}.cb{color:var(--bleu)}.cd{color:var(--dim);font-size:11px}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:flex-start;justify-content:center;padding:20px;z-index:100;overflow-y:auto}
+.mod{background:var(--gris);border:1px solid var(--gris3);border-radius:8px;width:100%;max-width:820px;margin:auto}
+.mh{padding:20px 24px;border-bottom:1px solid var(--gris3);display:flex;align-items:center;justify-content:space-between}
+.mt{font-family:'DM Serif Display',serif;font-size:20px;color:var(--or)}
+.ms{font-size:11px;color:var(--dim);margin-top:3px}
+.xb{background:none;border:1px solid var(--gris3);color:var(--dim);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px}
+.xb:hover{border-color:var(--or);color:var(--or)}
+.mb{padding:24px;display:flex;flex-direction:column;gap:20px}
+.st{font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--or);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--gris3)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.fld{display:flex;flex-direction:column;gap:5px}
+.fld label{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--dim)}
+.fld input,.fld select,.fld textarea{background:var(--noir);border:1px solid var(--gris3);color:var(--blanc);padding:9px 12px;border-radius:var(--r);font-family:'DM Mono',monospace;font-size:13px;outline:none;width:100%}
+.fld input:focus,.fld textarea:focus{border-color:var(--or)}
+.fld textarea{font-family:'Sora',sans-serif;font-size:12px;resize:vertical;min-height:70px}
+.ss{display:flex;gap:8px;flex-wrap:wrap}
+.so{padding:6px 14px;border-radius:3px;font-size:10px;text-transform:uppercase;letter-spacing:1px;font-weight:600;cursor:pointer;border:1px solid var(--gris3);color:var(--dim);background:var(--noir)}
+.so-offre{background:rgba(90,156,224,.2);color:var(--bleu);border-color:var(--bleu)}
+.so-acceptee{background:rgba(76,175,125,.2);color:var(--vert);border-color:var(--vert)}
+.so-refusee{background:rgba(224,90,90,.2);color:var(--rouge);border-color:var(--rouge)}
+.so-suivi{background:rgba(201,168,76,.2);color:var(--or);border-color:var(--or)}
+.cr2{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--noir);border-radius:var(--r);font-size:12px;margin-bottom:4px}
+.ctot{border:1px solid var(--or)}
+.ctot span:first-child{color:var(--or);font-weight:600}
+.ctot span:last-child{color:var(--or)}
+.rt{width:100%;border-collapse:collapse}
+.rt th{padding:9px 12px;font-size:9px;text-transform:uppercase;letter-spacing:1.5px;font-weight:500;border-bottom:1px solid var(--gris3)}
+.rt td{padding:8px 12px;font-size:13px;border-bottom:1px solid #1e1e1e;font-family:'DM Mono',monospace}
+.rtw{background:var(--noir);border:1px solid var(--gris3);border-radius:var(--r);overflow:hidden;margin-bottom:8px}
+.cbr{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--mid);cursor:pointer}
+.cbr input{accent-color:var(--or);width:auto}
+.mf{padding:16px 24px;border-top:1px solid var(--gris3);display:flex;gap:10px;justify-content:flex-end;align-items:center}
+.dv{background:var(--noir);border:1px solid var(--gris3);border-radius:var(--r);padding:9px 12px;font-size:12px;font-family:'DM Mono',monospace;color:var(--or);min-height:38px}
+@media(max-width:700px){.kpis{grid-template-columns:1fr 1fr}.g2,.g3{grid-template-columns:1fr}.dash{padding:16px}.hdr{padding:14px 16px}}
+  .agents-overlay{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:200;display:flex;flex-direction:column;overflow-y:auto}
+  .agents-hdr{padding:20px 32px;border-bottom:1px solid #1a1a1a;display:flex;align-items:center;justify-content:space-between}
+  .agents-logo{font-family:"DM Serif Display",serif;font-size:22px;color:var(--or);letter-spacing:2px}
+  .agents-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px;padding:32px;max-width:1200px;margin:0 auto;width:100%}
+  .agent-card{background:var(--gris);border:1px solid var(--gris3);border-radius:12px;overflow:hidden;cursor:pointer;transition:transform .2s,box-shadow .2s}
+  .agent-card:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(201,168,76,.15)}
+  .agent-card-top{padding:22px;border-bottom:1px solid var(--gris3)}
+  .agent-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px}
+  .agent-num{font-family:"DM Mono",monospace;font-size:10px;color:var(--dim);letter-spacing:2px;margin-bottom:4px}
+  .agent-name{font-size:17px;font-weight:600;color:var(--blanc);margin-bottom:6px}
+  .agent-desc{font-size:12px;color:var(--dim);line-height:1.6}
+  .agent-card-foot{padding:14px 22px;display:flex;align-items:center;justify-content:space-between;background:rgba(0,0,0,.2)}
+  .agent-status{font-size:9px;text-transform:uppercase;letter-spacing:1px;padding:3px 8px;border-radius:20px;font-weight:600}
+  .status-ok{background:rgba(76,175,125,.15);color:var(--vert);border:1px solid rgba(76,175,125,.3)}
+  .status-no{background:rgba(201,168,76,.1);color:var(--or);border:1px solid rgba(201,168,76,.2)}
+  .agent-panel{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:300;display:flex;align-items:flex-end;justify-content:center;padding:20px}
+  .agent-box{background:var(--gris);border:1px solid var(--gris3);border-radius:12px 12px 0 0;width:100%;max-width:700px;max-height:88vh;overflow-y:auto}
+  .agent-box-hdr{padding:20px 24px;border-bottom:1px solid var(--gris3);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--gris);z-index:1}
+  .agent-box-title{font-size:18px;font-weight:600;color:var(--or)}
+  .agent-box-body{padding:24px;display:flex;flex-direction:column;gap:16px}
+  .ia-result{background:var(--noir);border:1px solid var(--gris3);border-radius:var(--r);padding:20px;font-size:13px;line-height:1.8;color:var(--blanc);white-space:pre-wrap;font-family:"Plus Jakarta Sans",sans-serif}
+  .ia-loading{display:flex;align-items:center;gap:10px;color:var(--dim);font-size:13px;padding:16px 0}
+  .dp{display:flex;gap:4px}
+  .dp span{width:6px;height:6px;border-radius:50%;background:var(--or);animation:pulse 1.4s infinite both}
+  .dp span:nth-child(2){animation-delay:.2s}
+  .dp span:nth-child(3){animation-delay:.4s}
+  @keyframes pulse{0%,80%,100%{opacity:.2}40%{opacity:1}}
+  .btn-ia{background:var(--or);color:var(--noir);border:none;border-radius:var(--r);padding:12px 24px;font-family:"Sora",sans-serif;font-size:13px;font-weight:600;cursor:pointer;width:100%;transition:opacity .2s}
+  .btn-ia:hover{opacity:.85}
+  .btn-ia:disabled{background:var(--gris3);color:var(--dim);cursor:not-allowed}
+  .score-box{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:8px}
+  .score-item{background:var(--noir);border:1px solid var(--gris3);border-radius:var(--r);padding:14px;text-align:center}
+  .score-label{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--dim);margin-bottom:6px}
+  .score-value{font-family:"DM Mono",monospace;font-size:24px;font-weight:500}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <div class="logo">MOVA<span>Rentabilité Immobilière</span></div>
+  <div style="display:flex;gap:8px;align-items:center">
+<button class="bp" id="btn-agents" onclick="openAgentsPanel()" style="background:linear-gradient(135deg,#1a3a5c,#0a2540);border:1px solid #c9a84c">✦ Agents IA</button>
+<button class="bp" id="btn-nouveau" onclick="openNew()">+ Nouvel actif</button>
+</div>
+</div>
+<div class="dash">
+  <div class="kpis" id="kpis"></div>
+  <div class="tw">
+    <div class="th2" id="th2"></div>
+    <div class="tscroll">
+      <table>
+        <thead><tr>
+          <th>Réf.</th><th>Adresse</th><th>Type</th><th>Nature</th><th>Surface</th>
+          <th>Prix affiché</th><th>Prix offre</th><th>Prix /m²</th><th>Travaux</th><th>Coût total</th>
+          <th>Revente cons./cible</th><th>Plus-value</th><th>Marge</th>
+          <th>Statut</th><th>Agent / Commission</th><th>Annonce</th>
+        </tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="ov" id="modal" style="display:none">
+  <div class="mod">
+    <div class="mh">
+      <div><div class="mt" id="mod-title"></div><div class="ms" id="mod-sub"></div></div>
+      <button class="xb" id="btn-fermer" onclick="closeModal()">✕</button>
+    </div>
+    <div class="mb" id="mod-body"></div>
+    <div class="mf">
+      <button class="bs" id="btn-annuler" onclick="closeModal()">Annuler</button>
+      <button class="bs" id="btn-reset" style="margin-right:auto;margin-left:8px" onclick="resetActif()">↺ Réinitialiser</button>
+      <button class="bp" id="btn-save" onclick="saveActif()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<script>
+
+// ── Supabase Config ──────────────────────────────────────────────────────
+var SB_URL = 'https://hmvnfllcyrtnloqdghby.supabase.co';
+var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhtdm5mbGxjeXJ0bmxvcWRnaGJ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxMzQ2MjEsImV4cCI6MjA5NTcxMDYyMX0.8F6MkmipzwFUH69Di--AbCC8vUFew6K8GMrCoTeYo0Q';
+
+function sbHeaders() {
+  return {
+    'Content-Type': 'application/json',
+    'apikey': SB_KEY,
+    'Authorization': 'Bearer ' + SB_KEY
+  };
+}
+
+function loadFromSupabase(callback) {
+  fetch(SB_URL + '/rest/v1/actifs?select=*&order=id.asc', {
+    headers: {
+      'apikey': SB_KEY,
+      'Authorization': 'Bearer ' + SB_KEY,
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    }
+  })
+  .then(function(r) {
+    if(!r.ok) throw new Error('HTTP ' + r.status);
+    return r.json();
+  })
+  .then(function(data) {
+    console.log('SUPABASE OK:', data.length, 'lignes');
+    if (Array.isArray(data) && data.length > 0) {
+      actifs = data.map(function(row) {
+        try {
+          var a = typeof row.data === 'string' ? JSON.parse(row.data) : row.data;
+          a.id = row.id;
+          return a;
+        } catch(e) {
+          return JSON.parse(JSON.stringify(DEF));
+        }
+      });
+      callback();
+    } else {
+      actifs = [JSON.parse(JSON.stringify(DEF)), JSON.parse(JSON.stringify(ACT002)), JSON.parse(JSON.stringify(ACT003))];
+      callback();
+    }
+  })
+  .catch(function(err) {
+    console.log('SUPABASE ERROR:', err.message);
+    actifs = [JSON.parse(JSON.stringify(DEF)), JSON.parse(JSON.stringify(ACT002)), JSON.parse(JSON.stringify(ACT003))];
+    callback();
+  });
+}
+
+function insertActif(a, callback) {
+  fetch(SB_URL + '/rest/v1/actifs', {
+    method: 'POST',
+    headers: Object.assign({}, sbHeaders(), {'Prefer': 'return=representation'}),
+    body: JSON.stringify({ ref: a.ref, data: JSON.stringify(a) })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(rows) {
+    if (rows && rows[0]) { a.id = rows[0].id; }
+    if (callback) callback();
+  })
+  .catch(function() { if (callback) callback(); });
+}
+
+function updateActif(a, callback) {
+  if (!a.id || typeof a.id !== 'number') { if(callback) callback(); return; }
+  fetch(SB_URL + '/rest/v1/actifs?id=eq.' + a.id, {
+    method: 'PATCH',
+    headers: Object.assign({}, sbHeaders(), {'Prefer': 'return=minimal'}),
+    body: JSON.stringify({ ref: a.ref, data: JSON.stringify(a) })
+  })
+  .then(function() { if (callback) callback(); })
+  .catch(function() { if (callback) callback(); });
+}
+
+function showSync(ok) {
+  var el = document.getElementById('sync-indicator');
+  if (!el) return;
+  el.textContent = ok ? '✓ Synchronisé' : '⚠ Hors ligne';
+  el.style.color = ok ? '#4caf7d' : '#e05a5a';
+}
+
+var E = function(id){return document.getElementById(id);};
+var fmt = function(n){return (isNaN(n)||n===null||n===undefined)?'—':Number(n).toLocaleString('fr-FR',{maximumFractionDigits:0})+' €';};
+var fmtP = function(n){return (isNaN(n)||n===null)?'—':Number(n).toFixed(1)+' %';};
+var esc = function(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');};
+
+function vide(){return {id:Date.now(),ref:'',adresse:'',prixAffiche:'',ville:'',nature:'',typeImmeuble:'',surface:'',surfaceApres:'',statut:'offre',prixOffre:'',tauxAgenceAchat:'0',tauxNotaire:'3',travaux:'',tauxBancaire:'7',tauxHypotheque:'1.5',fraisLeveeHypotheque:'1500',tauxSEP:'2',taxeFonciere:'',charges:'',geometre:false,coutGeometre:'996',ingenieurBeton:false,coutIngenieur:'',age:false,coutAGE:'',rachatPartieCommune:false,coutRachat:'1000',modificationRCP:false,coutRCP:'',permisConstructire:false,coutPermis:'',prixReventeConservateur:'',prixReventeCible:'',prixRevente:'',tauxAgenceRevente:'5',agenceNom:'',agenceTauxCommission:'',lienAnnonce:'',notes:''};}
+
+var DEF = vide();
+DEF.id=1;DEF.ref='ACT-001';DEF.adresse='131 rue Greuze';DEF.ville='Paris 16e';
+DEF.nature='Immeuble — Division 2 lots';DEF.typeImmeuble='Haussmannien';
+DEF.surface='158';DEF.surfaceApres='158';DEF.statut='offre';
+DEF.prixAffiche='1300000';DEF.prixOffre='1300000';DEF.tauxAgenceAchat='0';DEF.tauxNotaire='3';DEF.travaux='268600';
+DEF.tauxBancaire='7';DEF.tauxHypotheque='1.5';DEF.fraisLeveeHypotheque='1500';DEF.tauxSEP='2';
+DEF.taxeFonciere='';DEF.charges='';
+DEF.geometre=false;DEF.ingenieurBeton=false;
+DEF.age=true;DEF.coutAGE='800';
+DEF.rachatPartieCommune=false;DEF.modificationRCP=true;DEF.coutRCP='2000';DEF.permisConstructire=false;
+DEF.prixReventeConservateur='2291000';DEF.prixReventeCible='2449000';DEF.prixRevente='2291000';
+DEF.tauxAgenceRevente='5';DEF.agenceNom='';DEF.agenceTauxCommission='';DEF.lienAnnonce='';
+DEF.notes="NOUVELLE CONFIG : RDC = F2 42m² + F3/F4 70m² (avec bureau). 1er étage = Bureau + F3 + récupération combles. 3 à 4 lots au lieu de 2. Prix acquisition 1 300 000€ (8 228€/m²). Travaux 1 700€/m². Cour arborée, au calme. Conservateur 14 500€/m² | Cible 15 500€/m². AGE + modif RCP liées à la division.";
+
+var ACT002 = vide();
+ACT002.id = 2;
+ACT002.ref = 'ACT-002';
+ACT002.adresse = '141 rue de Vaugirard';
+ACT002.ville = 'Paris 15e';
+ACT002.nature = 'Appartement';
+ACT002.statut = 'offre';
+ACT002.prixOffre = '240000';
+ACT002.tauxAgenceAchat = '0';
+ACT002.tauxNotaire = '3';
+ACT002.agenceNom = 'Century 21';
+ACT002.agenceTauxCommission = '';
+ACT002.notes = 'Visite faite avec Jacques Herlaud (Century 21). Prix vendeur : 315 000€. Offre à 240 000€.';
+
+function calc(a,revOverride){
+  var pr=parseFloat(a.prixOffre)||0;
+  var rv=parseFloat(revOverride||a.prixRevente)||0;
+  var su=parseFloat(a.surface)||1;
+  var tr=parseFloat(a.travaux)||0;
+  var fAA=pr*(parseFloat(a.tauxAgenceAchat)/100||0);
+  var fN=pr*(parseFloat(a.tauxNotaire)/100||0.03);
+  var fB=pr*(parseFloat(a.tauxBancaire)/100||0.07)*0.75*(10/12);
+  var fH=pr*(parseFloat(a.tauxHypotheque)/100||0.015);
+  var fLH=parseFloat(a.fraisLeveeHypotheque)||1500;
+  var fSEP=(pr+tr)*(parseFloat(a.tauxSEP)/100||0.02);
+  var fC=(parseFloat(a.taxeFonciere)||0)+(parseFloat(a.charges)||0);
+  var fS=(a.geometre?parseFloat(a.coutGeometre)||996:0)+(a.ingenieurBeton?parseFloat(a.coutIngenieur)||0:0)+(a.age?parseFloat(a.coutAGE)||0:0)+(a.rachatPartieCommune?parseFloat(a.coutRachat)||1000:0)+(a.modificationRCP?parseFloat(a.coutRCP)||0:0)+(a.permisConstructire?parseFloat(a.coutPermis)||0:0);
+  var fAR=rv*(parseFloat(a.tauxAgenceRevente)/100||0.05);
+  var tot=pr+fAA+fN+tr+fB+fH+fLH+fSEP+fC+fS;
+  var pv=rv-fAR-tot;
+  var mg=tot>0?(pv/tot)*100:0;
+  return {fAA:fAA,fN:fN,fB:fB,fH:fH,fLH:fLH,fSEP:fSEP,fC:fC,fS:fS,fAR:fAR,tot:tot,pv:pv,mg:mg,m2:pr/su};
+}
+
+var actifs=[];var cur=null;var isNew=false;
+
+function load(){
+  localStorage.removeItem('mova');
+  var ind = document.getElementById('sync-indicator');
+  if(ind) ind.textContent = '⟳ Chargement…';
+  loadFromSupabase(function() {
+    render();
+    showSync(true);
+  });
+}
+function save2LS(){
+  try{localStorage.setItem('mova',JSON.stringify(actifs));}catch(e){}
+}
+
+function slabel(s){return{offre:'Offre',acceptee:'Acceptée',refusee:'Refusée',suivi:'Suivi'}[s]||s;}
+function sclass(s){return{offre:'bo',acceptee:'ba',refusee:'br',suivi:'bs2'}[s]||'';}
+
+function render(){renderKPI();renderTable();}
+
+function renderKPI(){
+  var n=actifs.length;
+  var tot=actifs.reduce(function(s,a){return s+(parseFloat(a.prixOffre)||0);},0);
+  var vo=0,no=0,va=0,na=0,vs=0,ns=0;
+  actifs.forEach(function(a){var p=parseFloat(a.prixOffre)||0;if(a.statut==='offre'){vo+=p;no++;}if(a.statut==='acceptee'){va+=p;na++;}if(a.statut==='suivi'){vs+=p;ns++;}});
+  var pvc=0,pvt=0,msc=0,mst=0,nc=0,nt=0;
+  actifs.forEach(function(a){
+    if(a.prixReventeConservateur){var c=calc(a,a.prixReventeConservateur);pvc+=c.pv;msc+=c.mg;nc++;}
+    if(a.prixReventeCible){var c=calc(a,a.prixReventeCible);pvt+=c.pv;mst+=c.mg;nt++;}
+  });
+  var mc=nc>0?msc/nc:null;var mt=nt>0?mst/nt:null;
+  var margePers = 0.20;
+  E('kpis').innerHTML=
+    kpi('Actifs suivis',n,fmt(tot)+' au total','var(--or)')+
+    kpi2('En offre',fmt(vo),(no)+' bien'+(no>1?'s':'')+' en attente','var(--bleu)')+
+    kpi2('Acceptés',fmt(va),(na)+' bien'+(na>1?'s':'')+' validé'+(na>1?'s':''),'var(--vert)')+
+    kpi2('En transformation',fmt(vs),(ns)+' bien'+(ns>1?'s':'')+' en cours','var(--or)')+
+    '<div class="kpi"><div class="kl">Plus-value estimée</div>'+
+    '<div style="margin-top:4px">'+
+    '<div class="kls cb">Conservatrice</div>'+
+    '<div class="kvs '+(pvc>=0?'cv':'cr')+'">'+fmt(pvc)+'</div>'+
+    '<div class="ks">marge moy. '+(mc!==null?fmtP(mc):'—')+'</div>'+
+    '<div class="kdiv">'+
+    '<div class="kls cor">Cible</div>'+
+    '<div class="kvs '+(pvt>=0?'cv':'cr')+'">'+fmt(pvt)+'</div>'+
+    '<div class="ks">marge moy. '+(mt!==null?fmtP(mt):'—')+'</div>'+
+    '</div></div></div>'+
+    '<div class="kpi"><div class="kl">Ma marge (20%)</div>'+
+    '<div style="margin-top:4px">'+
+    '<div class="kls cb">Conservatrice</div>'+
+    '<div class="kvs '+(pvc>=0?'cv':'cr')+'">'+fmt(pvc*margePers)+'</div>'+
+    '<div class="ks">sur 20% de la PV</div>'+
+    '<div class="kdiv">'+
+    '<div class="kls cor">Cible</div>'+
+    '<div class="kvs '+(pvt>=0?'cv':'cr')+'">'+fmt(pvt*margePers)+'</div>'+
+    '<div class="ks">sur 20% de la PV</div>'+
+    '</div></div></div>';
+  E('th2').textContent='Actifs — '+n+' bien'+(n>1?'s':'');
+}
+function kpi(l,v,s,c){return '<div class="kpi"><div class="kl">'+l+'</div><div class="kv" style="color:'+c+'">'+v+'</div><div class="ks">'+s+'</div></div>';}
+function kpi2(l,v,s,c){return '<div class="kpi"><div class="kl">'+l+'</div><div class="kv" style="color:'+c+'">'+v+'</div><div class="ks">'+s+'</div></div>';}
+
+function renderTable(){
+  E('tbody').innerHTML=actifs.map(function(a,i){
+    var c=calc(a);var hp=!!a.prixOffre;
+    var cC=a.prixReventeConservateur?calc(a,a.prixReventeConservateur):null;
+    var cT=a.prixReventeCible?calc(a,a.prixReventeCible):null;
+    var tc=parseFloat(a.agenceTauxCommission)||0;
+    var cc1=tc&&a.prixReventeConservateur?fmt(parseFloat(a.prixReventeConservateur)*tc/100):'';
+    var cc2=tc&&a.prixReventeCible?fmt(parseFloat(a.prixReventeCible)*tc/100):'';
+    var pvHtml='<span class="cd">—</span>';
+    if(cC){pvHtml='<span class="'+(cC.pv>=0?'cv':'cr')+'">'+fmt(cC.pv)+'</span>';if(cT)pvHtml+=' <span class="cd">/</span> <span class="'+(cT.pv>=0?'cv':'cr')+'">'+fmt(cT.pv)+'</span>';}
+    var mgHtml='<span class="cd">—</span>';
+    if(cC){mgHtml='<span class="'+(cC.mg>=0?'cv':'cr')+'">'+fmtP(cC.mg)+'</span>';if(cT)mgHtml+=' <span class="cd">/</span> <span class="'+(cT.mg>=0?'cv':'cr')+'">'+fmtP(cT.mg)+'</span>';}
+    var rvHtml='<span class="cd">—</span>';
+    if(cC){rvHtml='<span class="cb">'+fmt(parseFloat(a.prixReventeConservateur))+'</span>';if(cT)rvHtml+=' <span class="cd">/</span> <span class="cor">'+fmt(parseFloat(a.prixReventeCible))+'</span>';}
+    var agHtml='<span class="cd">—</span>';
+    if(a.agenceNom){agHtml='<div style="font-size:11px;font-weight:500">'+esc(a.agenceNom)+'</div>';agHtml+=tc?'<div class="mono cor" style="font-size:10px">'+tc+'%</div>':'<div class="cd" style="font-size:10px">taux à renseigner</div>';if(tc&&(cc1||cc2))agHtml+='<div class="cd mono" style="font-size:10px">'+cc1+(cc1&&cc2?' / ':'')+cc2+'</div>';}
+    var lnHtml='<span class="cd">—</span>';
+    if(a.lienAnnonce)lnHtml='<a href="'+esc(a.lienAnnonce)+'" target="_blank" style="color:var(--or);font-size:11px;text-decoration:none;border:1px solid var(--gris3);padding:3px 8px;border-radius:3px">🔗 Voir</a>';
+    return '<tr onclick="open2('+i+')">'
+      +'<td><span class="mono cor">'+esc(a.ref||'—')+'</span></td>'
+      +'<td><div style="font-weight:500">'+esc(a.adresse||'—')+'</div><div class="cd">'+esc(a.ville)+'</div></td>'
+      +'<td class="cd">'+esc(a.typeImmeuble||'—')+'</td>'
+      +'<td class="cd">'+esc(a.nature||'—')+'</td>'
+      +'<td class="mono">'+(a.surface?esc(a.surface)+' m²':'<span class="cd">—</span>')+'</td>'
+      +'<td class="mono" style="font-size:11px;color:var(--dim)">'+(a.prixAffiche?fmt(parseFloat(a.prixAffiche)):'<span class="cd">—</span>')+'</td>'
+      +'<td class="mono">'+(hp?fmt(parseFloat(a.prixOffre)):'<span class="cd">—</span>')+'</td>'
+      +'<td class="mono cd">'+(hp?fmt(c.m2):'—')+'</td>'
+      +'<td class="mono">'+(a.travaux?fmt(parseFloat(a.travaux)):'<span class="cd">—</span>')+'</td>'
+      +'<td class="mono">'+(hp?fmt(c.tot):'<span class="cd">—</span>')+'</td>'
+      +'<td class="mono" style="font-size:11px">'+rvHtml+'</td>'
+      +'<td class="mono" style="font-size:11px">'+pvHtml+'</td>'
+      +'<td class="mono" style="font-size:11px">'+mgHtml+'</td>'
+      +'<td><span class="badge '+sclass(a.statut)+'">'+slabel(a.statut)+'</span></td>'
+      +'<td>'+agHtml+'</td>'
+      +'<td onclick="event.stopPropagation()">'+lnHtml+'</td>'
+      +'</tr>';
+  }).join('');
+}
+
+function open2(i){cur=JSON.parse(JSON.stringify(actifs[i]));isNew=false;showModal();}
+function openNew(){var n=actifs.length+1;cur=vide();cur.ref='ACT-'+String(n).padStart(3,'0');isNew=true;showModal();}
+function closeModal(){E('modal').style.display='none';cur=null;}
+function resetActif(){if(!cur)return;if(cur.id===1){cur=JSON.parse(JSON.stringify(DEF));showModal();}else if(cur.id===2){cur=JSON.parse(JSON.stringify(ACT002));showModal();}else if(cur.id===3){cur=JSON.parse(JSON.stringify(ACT003));showModal();}else{cur=Object.assign(vide(),{id:cur.id,ref:cur.ref});showModal();}}
+function saveActif(){
+  var copy = JSON.parse(JSON.stringify(cur));
+  if(isNew) {
+    insertActif(copy, function() {
+      actifs.push(copy);
+      save2LS();
+      closeModal();
+      render();
+      showSync(true);
+    });
+  } else {
+    var i = actifs.findIndex(function(a){return a.id===cur.id;});
+    if(i>=0) actifs[i] = copy;
+    updateActif(copy, function() {
+      save2LS();
+      closeModal();
+      render();
+      showSync(true);
+    });
+  }
+}
+
+function set2(k,v){cur[k]=v;refreshCalc();}
+function setB(k,v){cur[k]=v;showModal();}
+
+function showModal(){
+  E('mod-title').textContent=cur.ref||'Nouvel actif';
+  E('mod-sub').textContent=[cur.adresse,cur.ville].filter(Boolean).join(' — ');
+  E('mod-body').innerHTML=buildBody();
+  E('modal').style.display='flex';
+}
+
+function refreshCalc(){
+  var el=E('zone-calc');if(el)el.innerHTML=buildCalc();
+}
+
+function buildCalc(){
+  var a=cur;
+  var c=calc(a,a.prixReventeConservateur||a.prixOffre||'0');
+  var cC=a.prixReventeConservateur?calc(a,a.prixReventeConservateur):null;
+  var cT=a.prixReventeCible?calc(a,a.prixReventeCible):null;
+  var tR=parseFloat(a.tauxAgenceRevente)/100||0.05;
+  var tC=parseFloat(a.agenceTauxCommission)||0;
+
+  var lignes=[
+    ["Prix d'achat",parseFloat(a.prixOffre)||0],
+    ["Frais agence achat",c.fAA],["Frais de notaire",c.fN],
+    ["Travaux & équipements",parseFloat(a.travaux)||0],
+    ["Frais bancaires",c.fB],["Frais hypothèque",c.fH],
+    ["Levée hypothèque",c.fLH],["Frais SEP",c.fSEP],
+    ["Frais courants",c.fC],["Frais spéciaux",c.fS]
+  ];
+  var h='<div class="st">Récapitulatif des coûts</div>';
+  lignes.forEach(function(l){h+='<div class="cr2"><span style="color:var(--mid)">'+l[0]+'</span><span class="mono">'+fmt(l[1])+'</span></div>';});
+  h+='<div class="cr2 ctot"><span>TOTAL COÛT</span><span class="mono">'+fmt(c.tot)+'</span></div>';
+
+  if(cC||cT){
+    h+='<div class="st" style="margin-top:16px">Résultats — Comparaison scénarios</div>';
+    h+='<div class="rtw"><table class="rt"><thead><tr>';
+    h+='<th style="text-align:left;color:var(--dim)"></th>';
+    h+='<th style="text-align:right;color:var(--bleu)">Conservateur</th>';
+    h+='<th style="text-align:right;color:var(--or)">Cible</th>';
+    h+='</tr></thead><tbody>';
+    var rows=[
+      ["Prix de revente",cC?fmt(parseFloat(a.prixReventeConservateur)):'—',cT?fmt(parseFloat(a.prixReventeCible)):'—',false],
+      ["Frais agence revente",cC?fmt(parseFloat(a.prixReventeConservateur)*tR):'—',cT?fmt(parseFloat(a.prixReventeCible)*tR):'—',false],
+      ["Prix net vendeur",cC?fmt(parseFloat(a.prixReventeConservateur)*(1-tR)):'—',cT?fmt(parseFloat(a.prixReventeCible)*(1-tR)):'—',false],
+      ["Plus-value",cC?fmt(cC.pv):'—',cT?fmt(cT.pv):'—',true],
+      ["Marge %",cC?fmtP(cC.mg):'—',cT?fmtP(cT.mg):'—',true]
+    ];
+    rows.forEach(function(r){
+      var vc=r[3]&&cC?(cC.pv>=0?'var(--vert)':'var(--rouge)'):'var(--blanc)';
+      var vt=r[3]&&cT?(cT.pv>=0?'var(--vert)':'var(--rouge)'):'var(--blanc)';
+      h+='<tr><td style="color:var(--mid);font-family:Sora,sans-serif;font-size:11px">'+r[0]+'</td>';
+      h+='<td style="text-align:right;color:'+vc+'">'+r[1]+'</td>';
+      h+='<td style="text-align:right;color:'+vt+'">'+r[2]+'</td></tr>';
+    });
+    h+='</tbody></table></div>';
+  }
+
+  if(tC&&(a.prixReventeConservateur||a.prixReventeCible)){
+    h+='<div class="st" style="margin-top:8px">Commission agent</div>';
+    h+='<div class="dv" style="font-size:11px">';
+    if(a.prixReventeConservateur)h+='<span class="cb">Cons: '+fmt(parseFloat(a.prixReventeConservateur)*tC/100)+'</span>';
+    if(a.prixReventeConservateur&&a.prixReventeCible)h+=' / ';
+    if(a.prixReventeCible)h+='<span class="cor">Cible: '+fmt(parseFloat(a.prixReventeCible)*tC/100)+'</span>';
+    h+='</div>';
+  }
+  return h;
+}
+
+function inp(label,key,val,type,ph,sty){
+  type=type||'text';ph=ph||'';sty=sty||'font-family:DM Mono,monospace';
+  var sv=String(val||'').replace(/"/g,'&quot;');
+  return '<div class="fld"><label>'+label+'</label><input type="'+type+'" value="'+sv+'" placeholder="'+ph+'" style="'+sty+'" oninput="set2(\''+key+'\',this.value)"/></div>';
+}
+
+function buildBody(){
+  var a=cur;
+  var ss=['offre','acceptee','refusee','suivi'];
+  var h='';
+
+  h+='<div><div class="st">Statut de l\'offre</div><div class="ss">';
+  ss.forEach(function(s){h+='<div class="so'+(a.statut===s?' so-'+s:'')+'" onclick="setB(\'statut\',\''+s+'\')">'+slabel(s)+'</div>';});
+  h+='</div></div>';
+
+  h+='<div><div class="st">Descriptif du bien</div><div class="g3">';
+  h+=inp('Référence','ref',a.ref,'text','','font-family:Sora,sans-serif');
+  h+=inp('Nature','nature',a.nature,'text','Immeuble, Maison…','font-family:Sora,sans-serif');
+  h+=inp("Type d'immeuble",'typeImmeuble',a.typeImmeuble||'','text','Haussmannien…','font-family:Sora,sans-serif');
+  h+=inp('Adresse','adresse',a.adresse,'text','','font-family:Sora,sans-serif');
+  h+=inp('Ville','ville',a.ville,'text','','font-family:Sora,sans-serif');
+  h+=inp('Surface actuelle (m²)','surface',a.surface,'number');
+  h+=inp('Surface après travaux (m²)','surfaceApres',a.surfaceApres,'number');
+  h+='</div></div>';
+
+  h+='<div><div class="st">Acquisition</div><div class="g3">';
+  h+=inp('Prix affiché vendeur (€)','prixAffiche',a.prixAffiche||'','number');
+  h+=inp("Prix d'offre (€)",'prixOffre',a.prixOffre,'number');
+  h+=inp('Frais agence achat (%)','tauxAgenceAchat',a.tauxAgenceAchat,'number');
+  h+=inp('Frais notaire (%)','tauxNotaire',a.tauxNotaire,'number');
+  h+=inp('Travaux + mobilier (€)','travaux',a.travaux,'number');
+  h+=inp('Frais bancaires (%/an)','tauxBancaire',a.tauxBancaire,'number');
+  h+=inp('Hypothèque (%)','tauxHypotheque',a.tauxHypotheque,'number');
+  h+=inp('Levée hypothèque (€)','fraisLeveeHypotheque',a.fraisLeveeHypotheque,'number');
+  h+=inp('Frais SEP (%)','tauxSEP',a.tauxSEP,'number');
+  h+='</div></div>';
+
+  h+='<div><div class="st">Frais courants</div><div class="g2">';
+  h+=inp('Taxe foncière (€/an)','taxeFonciere',a.taxeFonciere,'number');
+  h+=inp('Charges + électricité (€/an)','charges',a.charges,'number');
+  h+='</div></div>';
+
+  var fs=[['geometre','coutGeometre','Géomètre (€)','996'],['ingenieurBeton','coutIngenieur','Ingénieur béton (€)',''],['age','coutAGE','AGE (€)',''],['rachatPartieCommune','coutRachat','Rachat partie commune (€)','1000'],['modificationRCP','coutRCP','Modification RCP (€)',''],['permisConstructire','coutPermis','Permis de construire (€)','']];
+  h+='<div><div class="st">Frais spéciaux (cocher si applicable)</div><div style="display:flex;flex-direction:column;gap:8px">';
+  fs.forEach(function(f){
+    h+='<div style="display:flex;align-items:center;gap:12px">';
+    h+='<label class="cbr"><input type="checkbox" '+(a[f[0]]?'checked':'')+' onchange="setB(\''+f[0]+'\',this.checked)"> '+f[2]+'</label>';
+    if(a[f[0]])h+='<div style="flex:1">'+inp('',f[1],a[f[1]],'number',f[3])+'</div>';
+    h+='</div>';
+  });
+  h+='</div></div>';
+
+  h+='<div><div class="st">Agent — Commercialisation à la revente</div><div class="g3">';
+  h+=inp("Nom de l'agence",'agenceNom',a.agenceNom||'','text','Agence XYZ','font-family:Sora,sans-serif');
+  h+=inp('Commission (%)','agenceTauxCommission',a.agenceTauxCommission||'','number','ex: 4');
+  h+='<div class="fld"><label>Mandats à émettre</label><div class="dv" style="font-size:11px;color:var(--mid)">F5 — 115 m² (RDC)<br>F3 — 43 m² (étage)</div></div>';
+  h+='</div></div>';
+
+  h+='<div><div class="st">Revente</div><div class="g3">';
+  h+=inp('Prix conservateur (€)','prixReventeConservateur',a.prixReventeConservateur||'','number');
+  h+=inp('Prix cible (€)','prixReventeCible',a.prixReventeCible||'','number');
+  h+=inp('Frais agence revente (%)','tauxAgenceRevente',a.tauxAgenceRevente,'number');
+  h+='</div></div>';
+
+  h+='<div id="zone-calc">'+buildCalc()+'</div>';
+
+  h+='<div><div class="st">Lien annonce</div><div class="fld"><label>URL de l annonce</label>';
+  h+='<input type="url" value="'+esc(a.lienAnnonce||'')+'" placeholder="https://..." style="font-family:Sora,sans-serif" oninput="set2(\'lienAnnonce\',this.value)"/>';
+  if(a.lienAnnonce)h+='<a href="'+esc(a.lienAnnonce)+'" target="_blank" style="color:var(--or);font-size:11px;margin-top:4px;display:inline-block">Ouvrir l annonce</a>';
+  h+='</div></div>';
+
+  h+='<div><div class="st">Notes</div><div class="fld"><textarea oninput="set2(\'notes\',this.value)">'+esc(a.notes||'')+'</textarea></div></div>';
+
+  return h;
+}
+
+var ACT003 = vide();
+ACT003.id = 3;
+ACT003.ref = 'ACT-003';
+ACT003.adresse = '17 avenue Kléber';
+ACT003.ville = 'Paris 16e';
+ACT003.nature = 'Appartement';
+ACT003.typeImmeuble = 'Haussmannien';
+ACT003.surface = '91';
+ACT003.surfaceApres = '91';
+ACT003.statut = 'offre';
+ACT003.prixAffiche = '995000';
+ACT003.prixOffre = '804750';
+ACT003.tauxAgenceAchat = '0';
+ACT003.tauxNotaire = '3';
+ACT003.travaux = '136500';
+ACT003.tauxBancaire = '7';
+ACT003.tauxHypotheque = '1.5';
+ACT003.fraisLeveeHypotheque = '1500';
+ACT003.tauxSEP = '2';
+ACT003.taxeFonciere = '';
+ACT003.charges = '';
+ACT003.prixReventeConservateur = '1319500';
+ACT003.prixReventeCible = '1410500';
+ACT003.prixRevente = '1319500';
+ACT003.tauxAgenceRevente = '5';
+ACT003.agenceNom = '';
+ACT003.agenceTauxCommission = '';
+ACT003.lienAnnonce = '';
+ACT003.notes = '1er étage. Prix affiché 995 000€ (10 934€/m²). Offre cible à 804 750€ (8 844€/m²) pour 30% de marge. Travaux 1 500€/m². Revente : cons 14 500€/m² | cible 15 500€/m². Visite le 1er juin.';
+
+// ── Agents IA ────────────────────────────────────────────────────────────
+var agentsDefs = [
+  {id:1,num:'01',icon:'📊',nom:'Analyste de marché',desc:'Analyse les prix au m² du secteur et propose une fourchette de revente réaliste.',status:'ok'},
+  {id:2,num:'02',icon:'✅',nom:'Vérificateur de rentabilité',desc:'Vérifie la cohérence de vos chiffres et alerte sur les risques.',status:'ok'},
+  {id:3,num:'03',icon:'📝',nom:'Rédacteur de synthèse investisseur',desc:'Génère une note de présentation professionnelle pour vos décisionnaires.',status:'ok'},
+  {id:4,num:'04',icon:'⭐',nom:'Scoreur d\'opportunite',desc:'Note le bien de 1 à 10 selon la rentabilité, le risque et le potentiel.',status:'ok'},
+  {id:5,num:'05',icon:'🔍',nom:'Chasseur d\'opportunites',desc:'Scanne les annonces en temps réel selon vos critères de rentabilité MOVA.',status:'ok'},
+];
+
+function openAgentsPanel() {
+  var g = document.getElementById('agents-grid');
+  if(!g) return;
+  g.innerHTML = agentsDefs.map(function(a) {
+    return '<div class="agent-card" onclick="openAgentAction('+a.id+')" style="cursor:pointer">'
+      +'<div class="agent-card-top">'
+      +'<div class="agent-icon" style="background:rgba(201,168,76,.1);width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px">'+a.icon+'</div>'
+      +'<div style="font-family:DM Mono,monospace;font-size:10px;color:var(--dim);letter-spacing:2px;margin-bottom:4px">Agent '+a.num+'</div>'
+      +'<div style="font-size:17px;font-weight:600;color:var(--blanc);margin-bottom:6px">'+a.nom+'</div>'
+      +'<div style="font-size:12px;color:var(--dim);line-height:1.6">'+a.desc+'</div>'
+      +'</div>'
+      +'<div style="padding:14px 22px;display:flex;align-items:center;justify-content:space-between;background:rgba(0,0,0,.2)">'
+      +'<span style="font-size:9px;text-transform:uppercase;letter-spacing:1px;padding:3px 8px;border-radius:20px;font-weight:600;'+(a.status==='ok'?'background:rgba(76,175,125,.15);color:var(--vert);border:1px solid rgba(76,175,125,.3)':'background:rgba(201,168,76,.1);color:var(--or);border:1px solid rgba(201,168,76,.2)')+'">'+(a.status==='ok'?'Disponible':'Bientôt')+'</span>'
+      +(a.status==='ok'?'<button class="bp" style="padding:6px 14px;font-size:11px" onclick="event.stopPropagation();openAgentAction('+a.id+')">Utiliser →</button>':'')
+      +'</div></div>';
+  }).join('');
+  document.getElementById('agents-overlay').style.display='flex';
+}
+
+function openAgentAction(id) {
+  var a = agentsDefs.find(function(x){return x.id===id;});
+  if(!a||a.status!=='ok') return;
+  document.getElementById('agent-panel-title').textContent = a.icon+' '+a.nom;
+  document.getElementById('agent-panel-body').innerHTML = buildAgentUI(id);
+  document.getElementById('agent-panel').style.display='flex';
+}
+
+function buildAgentUI(id) {
+  var actifSelect = '<div class="fld"><label>Choisir un actif</label><select id="ag-actif" style="font-family:Sora,sans-serif">'
+    +actifs.map(function(a){return '<option value="'+a.id+'">'+a.ref+(a.adresse?' — '+a.adresse:'')+'</option>';}).join('')
+    +'</select></div>';
+  if(id===1) return actifSelect+'<div class="fld"><label>Infos complémentaires (optionnel)</label><input type="text" id="ag1-info" placeholder="ex: proche métro, refait à neuf..." style="font-family:Sora,sans-serif"/></div><button class="btn-ia" onclick="lancerAnalyste()">Analyser le marché</button><div id="ag1-result"></div>';
+  if(id===2) return actifSelect+'<button class="btn-ia" onclick="lancerVerificateur()">Vérifier la rentabilité</button><div id="ag2-result"></div>';
+  if(id===3) return actifSelect+'<div class="fld"><label>Nom du destinataire (optionnel)</label><input type="text" id="ag3-dest" placeholder="ex: M. Dupont" style="font-family:Sora,sans-serif"/></div><button class="btn-ia" onclick="lancerSynthese()">Générer la synthèse</button><div id="ag3-result"></div>';
+  if(id===4) return actifSelect+'<button class="btn-ia" onclick="lancerScore()">Scorer</button><div id="ag4-result"></div>';
+  if(id===5) return '<div style="display:flex;flex-direction:column;gap:16px">'
+    +'<div class="g2">'
+    +'<div class="fld"><label>Villes et arrondissements</label><input type="text" id="ch-arrondissements" value="Paris 16e, Paris 15e, Paris 11e, Versailles" style="font-family:Sora,sans-serif"/></div>'
+    
+    +'<div class="fld"><label>Surface min (m²)</label><input type="number" id="ch-surf-min" value="17"/></div>'
+    +'</div>'
+    +'<button class="btn-ia" id="ch-btn" onclick="lancerChasseur()">🔍 Lancer la chasse</button>'
+    +'<div id="ch-result"></div>'
+    +'</div>';
+  return '<div style="background:var(--noir);border:1px solid var(--gris3);border-radius:var(--r);padding:20px;color:var(--dim)">Bientôt disponible.</div>';
+}
+
+function getActifSelected() {
+  var sel = document.getElementById('ag-actif');
+  if(!sel) return actifs[0];
+  var id = parseInt(sel.value);
+  return actifs.find(function(a){return a.id===id;})||actifs[0];
+}
+
+// ── callClaude — moteur principal des agents 1-2-3 ──────────────────────
+function callClaude(prompt, resultId, btnText) {
+  var btn = document.querySelector('.btn-ia');
+  if(btn){btn.disabled=true;btn.textContent='En cours…';}
+  var el = document.getElementById(resultId);
+  if(el) el.innerHTML = '<div style="display:flex;align-items:center;gap:10px;color:var(--dim);font-size:13px;padding:16px 0"><div style="display:flex;gap:4px"><span style="width:6px;height:6px;border-radius:50%;background:var(--or);animation:pulse 1.4s infinite both;display:inline-block"></span><span style="width:6px;height:6px;border-radius:50%;background:var(--or);animation:pulse 1.4s .2s infinite both;display:inline-block"></span><span style="width:6px;height:6px;border-radius:50%;background:var(--or);animation:pulse 1.4s .4s infinite both;display:inline-block"></span></div> Agent en cours de réflexion…</div>';
+  fetch('https://movaapi.vercel.app/api/claude',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:2000,messages:[{role:'user',content:prompt}]})
+  })
+  .then(function(r){return r.json();})
+  .then(function(d){
+    var txt = d.content&&d.content[0]?d.content[0].text:'Erreur de génération.';
+    if(el) el.innerHTML='<div style="background:var(--noir);border:1px solid var(--gris3);border-radius:var(--r);padding:20px;font-size:13px;line-height:1.8;color:var(--blanc);white-space:pre-wrap">'+esc(txt)+'</div>'
+      +'<button onclick="navigator.clipboard.writeText(this.previousSibling.textContent)" style="margin-top:10px;background:none;border:1px solid var(--bleu);color:var(--bleu);border-radius:var(--r);padding:8px 16px;font-family:Sora,sans-serif;font-size:12px;cursor:pointer">📋 Copier</button>';
+    if(btn){btn.disabled=false;btn.textContent=btnText;}
+  })
+  .catch(function(){
+    if(el) el.innerHTML='<div style="background:var(--noir);border:1px solid var(--rouge);border-radius:var(--r);padding:14px;color:var(--rouge);font-size:12px">Erreur de connexion.</div>';
+    if(btn){btn.disabled=false;btn.textContent=btnText;}
+  });
+}
+
+// ── Agent 1 — Analyste de marché ─────────────────────────────────────────
+function lancerAnalyste() {
+  var a = getActifSelected();
+  var info = (document.getElementById('ag1-info')||{}).value||'';
+  var c = calc(a);
+  var prompt = 'Tu es un expert marchand de biens français spécialisé Paris Île-de-France.\n\nACTIF À ANALYSER :\n- Adresse : '+(a.adresse||'?')+', '+(a.ville||'')+'\n- Type : '+(a.typeImmeuble||a.nature||'?')+'\n- Surface totale : '+(a.surface||'?')+' m²\n- Configuration : '+(a.notes||'non renseignée')+'\n- Prix acquisition : '+fmt(parseFloat(a.prixOffre))+' ('+fmt(c.m2)+'/m²)\n- Travaux prévus : '+fmt(parseFloat(a.travaux))+' ('+fmt(parseFloat(a.travaux)/(parseFloat(a.surface)||1))+'/m²)\n'+(a.prixReventeConservateur?'- Revente conservatrice visée : '+fmt(parseFloat(a.prixReventeConservateur))+' ('+fmt(parseFloat(a.prixReventeConservateur)/(parseFloat(a.surface)||1))+'/m²)\n':'')+(a.prixReventeCible?'- Revente cible visée : '+fmt(parseFloat(a.prixReventeCible))+' ('+fmt(parseFloat(a.prixReventeCible)/(parseFloat(a.surface)||1))+'/m²)\n':'')+(info?'- Infos complémentaires : '+info+'\n':'')+'\nMODÈLE FINANCIER APPLIQUÉ :\n- Frais notaire : 3% (structure SPPE marchand de biens)\n- Financement : 7% sur 75% du coût total, durée 7 mois\n- Frais de vente : 2% du prix de revente\n- Objectif marge brute : 30% minimum\n\nDonne une analyse détaillée :\n1) Fourchette prix/m² secteur actuelle (données 2025)\n2) Évaluation du prix acquisition (décote, justification)\n3) Réalisme des prix de revente visés\n4) Tendance marché 2025-2026\n5) Recommandation finale VIABLE / RISQUÉE / DÉCONSEILLÉE\n\nSois précis, chiffré, direct. Maximum 500 mots.';
+  callClaude(prompt,'ag1-result','Nouvelle analyse');
+}
+
+// ── Agent 2 — Vérificateur de rentabilité ────────────────────────────────
+function lancerVerificateur() {
+  var a = getActifSelected();
+  var c = calc(a);
+  var cC = a.prixReventeConservateur?calc(a,a.prixReventeConservateur):null;
+  var cT = a.prixReventeCible?calc(a,a.prixReventeCible):null;
+  var prompt = 'Tu es un expert marchand de biens français.\n\nVÉRIFICATION FINANCIÈRE :\n- Bien : '+(a.adresse||'?')+', '+(a.ville||'')+'\n- Surface : '+(a.surface||'?')+' m², type : '+(a.typeImmeuble||a.nature||'?')+'\n- Configuration : '+(a.notes||'non renseignée')+'\n- Prix achat : '+fmt(parseFloat(a.prixOffre))+' ('+fmt(c.m2)+'/m²)\n- Travaux : '+fmt(parseFloat(a.travaux))+'\n- Coût total : '+fmt(c.tot)+'\n- Frais notaire : '+fmt(c.fN)+' (3% SPPE)\n- Frais bancaires : '+fmt(c.fB)+' (7% sur 75% / 7 mois)\n- Frais SEP : '+fmt(c.fSEP)+'\n- Frais spéciaux : '+fmt(c.fS)+'\n'+(cC?'- Scénario conservateur : '+fmt(parseFloat(a.prixReventeConservateur))+' → PV net '+fmt(cC.pv)+' (marge '+fmtP(cC.mg)+')\n':'')+(cT?'- Scénario cible : '+fmt(parseFloat(a.prixReventeCible))+' → PV net '+fmt(cT.pv)+' (marge '+fmtP(cT.mg)+')\n':'')+'\nAnalyse :\n1) Frais correctement estimés ?\n2) Postes oubliés ou sous-estimés ?\n3) Marge suffisante (seuil 30%) ?\n4) Risques principaux ?\n5) Verdict : VIABLE / RISQUÉE / DÉCONSEILLÉE\n\nSois direct et chiffré.';
+  callClaude(prompt,'ag2-result','Nouvelle vérification');
+}
+
+// ── Agent 3 — Rédacteur de synthèse ──────────────────────────────────────
+function lancerSynthese() {
+  var a = getActifSelected();
+  var dest = (document.getElementById('ag3-dest')||{}).value||'';
+  var c = calc(a);
+  var cC = a.prixReventeConservateur?calc(a,a.prixReventeConservateur):null;
+  var cT = a.prixReventeCible?calc(a,a.prixReventeCible):null;
+  var prompt = 'Tu es consultant immobilier senior. Rédige une note investisseur professionnelle.\n\nBIEN :\n- Adresse : '+(a.adresse||'?')+', '+(a.ville||'')+'\n- Type : '+(a.typeImmeuble||a.nature||'?')+' — '+(a.surface||'?')+' m²\n- Configuration : '+(a.notes||'non renseignée')+'\n- Prix acquisition : '+fmt(parseFloat(a.prixOffre))+'\n- Travaux : '+fmt(parseFloat(a.travaux))+'\n- Coût total : '+fmt(c.tot)+'\n'+(cC?'- Conservateur : '+fmt(parseFloat(a.prixReventeConservateur))+' → Marge '+fmtP(cC.mg)+' (PV '+fmt(cC.pv)+')\n':'')+(cT?'- Cible : '+fmt(parseFloat(a.prixReventeCible))+' → Marge '+fmtP(cT.mg)+' (PV '+fmt(cT.pv)+')\n':'')+(dest?'- Destinataire : '+dest+'\n':'')+'\nMODÈLE : Notaire 3% SPPE, financement 7%/75%/7 mois, frais vente 2%, objectif 30% marge.\n\nFormat : Introduction — Descriptif — Analyse financière — Points forts/risques — Conclusion. Ton professionnel, 400 mots max.';
+  callClaude(prompt,'ag3-result','Nouvelle synthèse');
+}
+
+// ── Agent 4 — Scoreur ─────────────────────────────────────────────────────
+function lancerScore() {
+  var a = getActifSelected();
+  var c = calc(a);
+  var cC = a.prixReventeConservateur?calc(a,a.prixReventeConservateur):null;
+  var cT = a.prixReventeCible?calc(a,a.prixReventeCible):null;
+  var prompt = 'Note cette opportunité immobilière de 1 à 10.\n\nBIEN :\n- Adresse : '+(a.adresse||'?')+', '+(a.ville||'')+'\n- Type : '+(a.typeImmeuble||a.nature||'?')+' — '+(a.surface||'?')+' m²\n- Prix acquisition : '+fmt(parseFloat(a.prixOffre))+' ('+fmt(c.m2)+'/m²)\n- Travaux : '+fmt(parseFloat(a.travaux))+'\n- Coût total : '+fmt(c.tot)+'\n'+(cC?'- Marge conservatrice : '+fmtP(cC.mg)+'\n':'')+(cT?'- Marge cible : '+fmtP(cT.mg)+'\n':'')+'\nMODÈLE : Notaire 3% SPPE, financement 7%/75%/7 mois, frais vente 2%, seuil viabilité 30%.\n\nRéponds UNIQUEMENT en JSON sans backticks :\n{"rentabilite":X,"risque":X,"potentiel":X,"localisation":X,"score_global":X,"verdict":"texte court","recommandation":"texte court"}';
+  var el = document.getElementById('ag4-result');
+  var btn = document.querySelector('.btn-ia');
+  if(btn){btn.disabled=true;btn.textContent='Calcul en cours…';}
+  if(el) el.innerHTML='<div style="display:flex;align-items:center;gap:10px;color:var(--dim);font-size:13px;padding:16px 0">Calcul du score…</div>';
+  fetch('https://movaapi.vercel.app/api/claude',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:500,messages:[{role:'user',content:prompt}]})
+  })
+  .then(function(r){return r.json();})
+  .then(function(d){
+    var txt = d.content&&d.content[0]?d.content[0].text:'{}';
+    try {
+      var dd = JSON.parse(txt.replace(/```json|```/g,'').trim());
+      var sc = dd.score_global||0;
+      var col = sc>=7?'var(--vert)':sc>=5?'var(--or)':'var(--rouge)';
+      var items = [['Rentabilité',dd.rentabilite],['Risque',dd.risque],['Potentiel',dd.potentiel],['Localisation',dd.localisation]];
+      var grid = '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px">'
+        +items.map(function(x){var c2=x[1]>=7?'var(--vert)':x[1]>=5?'var(--or)':'var(--rouge)';return '<div style="background:var(--noir);border:1px solid var(--gris3);border-radius:var(--r);padding:12px;text-align:center"><div style="font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--dim);margin-bottom:4px">'+x[0]+'</div><div style="font-family:DM Mono,monospace;font-size:22px;color:'+c2+'">'+x[1]+'/10</div></div>';}).join('')
+        +'<div style="background:var(--noir);border:2px solid '+col+';border-radius:var(--r);padding:12px;text-align:center;grid-column:span 2"><div style="font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--dim);margin-bottom:4px">Score global</div><div style="font-family:DM Mono,monospace;font-size:28px;color:'+col+'">'+sc+'/10</div></div>'
+        +'</div>';
+      if(el) el.innerHTML=grid+'<div style="background:var(--noir);border:1px solid var(--gris3);border-radius:var(--r);padding:16px;font-size:13px;line-height:1.7;color:var(--blanc)"><strong style="color:var(--or)">Verdict :</strong> '+esc(dd.verdict||'')+'\n\n<strong style="color:var(--or)">Recommandation :</strong> '+esc(dd.recommandation||'')+'</div>';
+    } catch(e) {
+      if(el) el.innerHTML='<div style="background:var(--noir);border:1px solid var(--gris3);border-radius:var(--r);padding:16px;font-size:13px;color:var(--blanc);white-space:pre-wrap">'+esc(txt)+'</div>';
+    }
+    if(btn){btn.disabled=false;btn.textContent='Nouveau score';}
+  })
+  .catch(function(){
+    if(el) el.innerHTML='<div style="color:var(--rouge);font-size:12px;padding:10px">Erreur de connexion.</div>';
+    if(btn){btn.disabled=false;btn.textContent='Nouveau score';}
+  });
+}
+
+// ── Envoi email via EmailJS ──────────────────────────────────────────────
+function envoyerEmail(contenu) {
+  fetch('https://api.emailjs.com/api/v1.0/email/send', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      service_id: 'service_mova',
+      template_id: 'template_mova',
+      user_id: 'EMAILJS_PUBLIC_KEY',
+      template_params: {
+        to_email: 'pgarcia.immo@gmail.com',
+        subject: '🔍 MOVA — Nouvelles opportunités immobilières',
+        message: contenu,
+        date: new Date().toLocaleString('fr-FR')
+      }
+    })
+  })
+  .then(function(r){ console.log('Email envoyé'); })
+  .catch(function(e){ console.log('Erreur email:', e); });
+}
+
+// ── Agent 5 — Chasseur d'opportunités ────────────────────────────────────
+function lancerChasseur() {
+  var arr = (document.getElementById('ch-arrondissements')||{}).value||'Paris 16e, Paris 15e, Paris 11e';
+  var surfMin = (document.getElementById('ch-surf-min')||{}).value||'50';
+  var el = document.getElementById('ch-result');
+  var btn = document.getElementById('ch-btn');
+  if(btn){btn.disabled=true;btn.textContent='Recherche en cours…';}
+  if(el) el.innerHTML='<div style="display:flex;align-items:center;gap:10px;color:var(--dim);font-size:13px;padding:16px 0"><div style="display:flex;gap:4px"><span style="width:6px;height:6px;border-radius:50%;background:var(--or);animation:pulse 1.4s infinite both;display:inline-block"></span><span style="width:6px;height:6px;border-radius:50%;background:var(--or);animation:pulse 1.4s .2s infinite both;display:inline-block"></span><span style="width:6px;height:6px;border-radius:50%;background:var(--or);animation:pulse 1.4s .4s infinite both;display:inline-block"></span></div> Chasseur en cours de recherche…</div>';
+  fetch('https://movaapi.vercel.app/api/claude',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      model:'claude-opus-4-5',
+      max_tokens:3000,
+      tools:[{"type":"web_search_20250305","name":"web_search"}],
+      messages:[{role:'user',content:'Tu es un chasseur immobilier pour un marchand de biens Paris Île-de-France.\n\nCRITÈRES DE RECHERCHE :\n- Arrondissements : '+arr+'\n- Surface : '+surfMin+'m² à '+surfMax+'m²\n- Budget max affiché : '+budgetMax+'€\n\nEFFECTUE DES RECHERCHES sur SeLoger, LeBonCoin, PAP, Bienici, MeilleursAgents.\n\nMOTS-CLÉS À UTILISER (combine-les dans tes recherches) :\nà rénover, à restaurer, à rafraîchir, à moderniser, à aménager, travaux, gros travaux, état dégradé, état usage, à saisir, succession, vente urgente, vente rapide, occupé, libéré, prix négociable, sous-évalué, opportunité, potentiel, cachet, parquet, moulures, dernier étage, sans ascenseur, rez-de-chaussée, cave, grenier, atypique, décoration à prévoir, rafraîchissement nécessaire.\n\nRemonte TOUTES les annonces trouvées — biens dégradés ET biens au prix du marché — sans aucun filtre.\n\nPour CHAQUE annonce trouvée, présente :\n1. Adresse précise (rue + arrondissement)\n2. Surface (m²)\n3. Prix affiché (€ et €/m²)\n4. Lien direct vers l annonce\n5. État du bien et caractéristiques clés (étage, ascenseur, exposition, type)\n\nMaximum 15 annonces. Trie par prix/m² croissant (les moins chers en premier).'}]
+    })
+  })
+  .then(function(r){return r.json();})
+  .then(function(d){
+    var txt = '';
+    if(d.content) d.content.forEach(function(b){if(b.type==='text')txt+=b.text;});
+    if(!txt) txt='Aucune opportunité trouvée correspondant à vos critères.';
+    if(el) el.innerHTML='<div style="background:var(--noir);border:1px solid var(--gris3);border-radius:var(--r);padding:20px;font-size:13px;line-height:1.8;color:var(--blanc);white-space:pre-wrap">'+esc(txt)+'</div>'
+      +'<button onclick="navigator.clipboard.writeText(this.previousSibling.textContent)" style="margin-top:10px;background:none;border:1px solid var(--bleu);color:var(--bleu);border-radius:var(--r);padding:8px 16px;font-family:Sora,sans-serif;font-size:12px;cursor:pointer">📋 Copier</button>';
+    if(txt && txt !== 'Aucune opportunité trouvée correspondant à vos critères.') {
+      envoyerEmail(txt);
+    }
+    if(btn){btn.disabled=false;btn.textContent='Nouvelle recherche';}
+  })
+  .catch(function(){
+    if(el) el.innerHTML='<div style="background:var(--noir);border:1px solid var(--rouge);border-radius:var(--r);padding:14px;color:var(--rouge);font-size:12px">Erreur de connexion.</div>';
+    if(btn){btn.disabled=false;btn.textContent='Nouvelle recherche';}
+  });
+}
+
+// ── Événements ────────────────────────────────────────────────────────────
+function bindEvents() {
+  var elems = {
+    'btn-nouveau': openNew,
+    'btn-agents': openAgentsPanel,
+    'btn-fermer': closeModal,
+    'btn-annuler': closeModal,
+    'btn-reset': resetActif,
+    'btn-save': saveActif
+  };
+  Object.keys(elems).forEach(function(id) {
+    var el = document.getElementById(id);
+    if(el) el.addEventListener('click', elems[id]);
+  });
+  var modal = document.getElementById('modal');
+  if(modal) modal.addEventListener('click', function(e){if(e.target===this)closeModal();});
+}
+
+load();
+</script>
+
+<!-- Agents IA Overlay -->
+<div id="agents-overlay" style="display:none" class="agents-overlay">
+  <div class="agents-hdr">
+    <div class="agents-logo">✦ Agents IA — MOVA</div>
+    <button class="xb" onclick="document.getElementById('agents-overlay').style.display='none'">✕</button>
+  </div>
+  <div class="agents-grid" id="agents-grid"></div>
+</div>
+
+<!-- Agent Panel -->
+<div id="agent-panel" class="agent-panel" style="display:none" onclick="if(event.target===this)document.getElementById('agent-panel').style.display='none'">
+  <div class="agent-box">
+    <div class="agent-box-hdr">
+      <div class="agent-box-title" id="agent-panel-title"></div>
+      <button class="xb" onclick="document.getElementById('agent-panel').style.display='none'">✕</button>
+    </div>
+    <div class="agent-box-body" id="agent-panel-body"></div>
+  </div>
+</div>
+</body>
+</html>
