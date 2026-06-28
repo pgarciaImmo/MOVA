@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v3 -->
+<!-- v4 -->
 <html lang="fr">
 <head>
 <meta charset="UTF-8"/>
@@ -100,6 +100,18 @@ tbody tr:hover{background:#EEF4FB}
 .btn-ia:hover{opacity:.85}
 .btn-ia:disabled{background:var(--gris3);color:var(--dim);cursor:not-allowed}
 @keyframes pulse{0%,80%,100%{opacity:.2}40%{opacity:1}}
+.vst{display:flex;flex-direction:column;gap:10px}
+.vst-add{display:flex;gap:10px;align-items:flex-start}
+.vst-add textarea{flex:1}
+.vst-add button{flex-shrink:0;white-space:nowrap;width:auto;padding:9px 18px}
+.vst-list{display:flex;flex-direction:column;gap:8px}
+.vst-card{background:#F8FBFF;border:1px solid #E0EEF8;border-radius:8px;padding:10px 12px}
+.vst-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px}
+.vst-date{font-size:10.5px;font-weight:700;color:#1A5FA8;text-transform:uppercase;letter-spacing:0.5px;font-family:'DM Mono',monospace}
+.vst-del{background:none;border:none;color:#BDD5EE;cursor:pointer;font-size:13px;padding:2px 6px}
+.vst-del:hover{color:#C0392B}
+.vst-comment{font-size:12.5px;color:#1A3A5C;line-height:1.5;white-space:pre-wrap}
+.vst-empty{font-size:12px;color:#8AAAC8;padding:10px;text-align:center}
 </style>
 </head>
 <body>
@@ -169,8 +181,10 @@ var E=function(id){return document.getElementById(id);};
 var fmt=function(n){return(isNaN(n)||n===null||n===undefined)?'—':Number(n).toLocaleString('fr-FR',{maximumFractionDigits:0})+' €';};
 var fmtP=function(n){return(isNaN(n)||n===null)?'—':Number(n).toFixed(1)+' %';};
 var esc=function(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');};
+var fmtDateV=function(iso){if(!iso)return'—';try{var d=new Date(iso);return d.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'2-digit'});}catch(e){return iso;}};
+var todayISO=function(){return new Date().toISOString().slice(0,10);};
 
-function vide(){return{id:Date.now(),ref:'',adresse:'',prixAffiche:'',ville:'',nature:'',typeImmeuble:'',surface:'',surfaceApres:'',surfaceCarrez:'',surfacePonderee:'',coeffPonderation:'50',statut:'offre',prixOffre:'',tauxAgenceAchat:'0',tauxNotaire:'3',travaux:'',tauxBancaire:'7',tauxHypotheque:'1.5',fraisLeveeHypotheque:'1500',tauxSEP:'2',taxeFonciere:'',charges:'',geometre:false,coutGeometre:'996',ingenieurBeton:false,coutIngenieur:'',age:false,coutAGE:'',rachatPartieCommune:false,coutRachat:'1000',modificationRCP:false,coutRCP:'',permisConstructire:false,coutPermis:'',prixReventeConservateur:'',prixReventeCible:'',prixM2Conservateur:'',prixM2Cible:'',prixRevente:'',lotsConservateur:[],lotsCible:[],tauxAgenceRevente:'5',agenceNom:'',agenceTauxCommission:'',lienAnnonce:'',notes:'',nbLots:'',prixVenteLotsTotal:'',coutDivision:''};};
+function vide(){return{id:Date.now(),ref:'',adresse:'',prixAffiche:'',ville:'',nature:'',typeImmeuble:'',surface:'',surfaceApres:'',surfaceCarrez:'',surfacePonderee:'',coeffPonderation:'50',statut:'offre',prixOffre:'',tauxAgenceAchat:'0',tauxNotaire:'3',travaux:'',tauxBancaire:'7',tauxHypotheque:'1.5',fraisLeveeHypotheque:'1500',tauxSEP:'2',taxeFonciere:'',charges:'',geometre:false,coutGeometre:'996',ingenieurBeton:false,coutIngenieur:'',age:false,coutAGE:'',rachatPartieCommune:false,coutRachat:'1000',modificationRCP:false,coutRCP:'',permisConstructire:false,coutPermis:'',prixReventeConservateur:'',prixReventeCible:'',prixM2Conservateur:'',prixM2Cible:'',prixRevente:'',lotsConservateur:[],lotsCible:[],tauxAgenceRevente:'5',agenceNom:'',agenceTauxCommission:'',lienAnnonce:'',notes:'',nbLots:'',prixVenteLotsTotal:'',coutDivision:'',visites:[]};};
 
 var DEF=vide();DEF.id=1;DEF.ref='ACT-001';DEF.adresse='131 rue Greuze';DEF.ville='Paris 16e';DEF.nature='Immeuble — Division 2 lots';DEF.typeImmeuble='Haussmannien';DEF.surface='158';DEF.surfaceApres='158';DEF.statut='offre';DEF.prixAffiche='1300000';DEF.prixOffre='1300000';DEF.tauxAgenceAchat='0';DEF.tauxNotaire='3';DEF.travaux='268600';DEF.tauxBancaire='7';DEF.tauxHypotheque='1.5';DEF.fraisLeveeHypotheque='1500';DEF.tauxSEP='2';DEF.age=true;DEF.coutAGE='800';DEF.modificationRCP=true;DEF.coutRCP='2000';DEF.prixReventeConservateur='2291000';DEF.prixReventeCible='2449000';DEF.prixRevente='2291000';DEF.tauxAgenceRevente='5';DEF.notes="NOUVELLE CONFIG : RDC = F2 42m² + F3/F4 70m² (avec bureau). 1er étage = Bureau + F3 + récupération combles. 3 à 4 lots au lieu de 2. Prix acquisition 1 300 000€ (8 228€/m²). Travaux 1 700€/m². Cour arborée, au calme. Conservateur 14 500€/m² | Cible 15 500€/m². AGE + modif RCP liées à la division.";
 var ACT002=vide();ACT002.id=2;ACT002.ref='ACT-002';ACT002.adresse='141 rue de Vaugirard';ACT002.ville='Paris 15e';ACT002.nature='Appartement';ACT002.statut='offre';ACT002.prixOffre='240000';ACT002.tauxAgenceAchat='0';ACT002.tauxNotaire='3';ACT002.agenceNom='Century 21';ACT002.notes='Visite faite avec Jacques Herlaud (Century 21). Prix vendeur : 315 000€. Offre à 240 000€.';
@@ -199,7 +213,7 @@ function calcDivision(a){
 
 var actifs=[];var cur=null;var isNew=false;
 
-function loadFromSupabase(cb){fetch(SB_URL+'/rest/v1/actifs?select=*&order=id.asc',{headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Accept':'application/json'}}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();}).then(function(data){if(Array.isArray(data)&&data.length>0){actifs=data.map(function(row){try{var a=typeof row.data==='string'?JSON.parse(row.data):row.data;a.id=row.id;return a;}catch(e){return JSON.parse(JSON.stringify(DEF));}});}else{actifs=[JSON.parse(JSON.stringify(DEF)),JSON.parse(JSON.stringify(ACT002)),JSON.parse(JSON.stringify(ACT003))];};cb();}).catch(function(){actifs=[JSON.parse(JSON.stringify(DEF)),JSON.parse(JSON.stringify(ACT002)),JSON.parse(JSON.stringify(ACT003))];cb();});}
+function loadFromSupabase(cb){fetch(SB_URL+'/rest/v1/actifs?select=*&order=id.asc',{headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Accept':'application/json'}}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();}).then(function(data){if(Array.isArray(data)&&data.length>0){actifs=data.map(function(row){try{var a=typeof row.data==='string'?JSON.parse(row.data):row.data;a.id=row.id;if(!a.visites)a.visites=[];return a;}catch(e){return JSON.parse(JSON.stringify(DEF));}});}else{actifs=[JSON.parse(JSON.stringify(DEF)),JSON.parse(JSON.stringify(ACT002)),JSON.parse(JSON.stringify(ACT003))];};cb();}).catch(function(){actifs=[JSON.parse(JSON.stringify(DEF)),JSON.parse(JSON.stringify(ACT002)),JSON.parse(JSON.stringify(ACT003))];cb();});}
 function insertActif(a,cb){fetch(SB_URL+'/rest/v1/actifs',{method:'POST',headers:Object.assign({},sbH(),{'Prefer':'return=representation'}),body:JSON.stringify({ref:a.ref,data:JSON.stringify(a)})}).then(function(r){return r.json();}).then(function(rows){if(rows&&rows[0])a.id=rows[0].id;if(cb)cb();}).catch(function(){if(cb)cb();});}
 function updateActif(a,cb){if(!a.id||typeof a.id!=='number'){if(cb)cb();return;}fetch(SB_URL+'/rest/v1/actifs?id=eq.'+a.id,{method:'PATCH',headers:Object.assign({},sbH(),{'Prefer':'return=minimal'}),body:JSON.stringify({ref:a.ref,data:JSON.stringify(a)})}).then(function(){if(cb)cb();}).catch(function(){if(cb)cb();});}
 
@@ -212,7 +226,7 @@ function renderKPI(){var n=actifs.length;var tot=actifs.reduce(function(s,a){ret
 
 function renderTable(){E('tbody').innerHTML=actifs.map(function(a,i){var c=calc(a);var hp=!!a.prixOffre;var rvC=prixReventeEffectif(a,'conservateur');var rvT=prixReventeEffectif(a,'cible');var cC=rvC?calc(a,rvC):null;var cT=rvT?calc(a,rvT):null;var tc=parseFloat(a.agenceTauxCommission)||0;var pvH='<span class="cd">—</span>';if(cC){pvH='<span class="'+(cC.pv>=0?'cv':'cr')+'">'+fmt(cC.pv)+'</span>';if(cT)pvH+=' <span class="cd">/</span> <span class="'+(cT.pv>=0?'cv':'cr')+'">'+fmt(cT.pv)+'</span>';}var mgH='<span class="cd">—</span>';if(cC){mgH='<span class="'+(cC.mg>=30?'cv':'cr')+'">'+fmtP(cC.mg)+'</span>';if(cT)mgH+=' <span class="cd">/</span> <span class="'+(cT.mg>=30?'cv':'cr')+'">'+fmtP(cT.mg)+'</span>';}var rvH='<span class="cd">—</span>';if(cC){rvH='<span class="cb">'+fmt(rvC)+'</span>';if(cT)rvH+=' <span class="cd">/</span> <span class="cor">'+fmt(rvT)+'</span>';}var agH='<span class="cd">—</span>';if(a.agenceNom){agH='<div style="font-size:11px;font-weight:500">'+esc(a.agenceNom)+'</div>';agH+=tc?'<div class="mono cor" style="font-size:10px">'+tc+'%</div>':'<div class="cd" style="font-size:10px">taux à renseigner</div>';}var lnH='<span class="cd">—</span>';if(a.lienAnnonce)lnH='<a href="'+esc(a.lienAnnonce)+'" target="_blank" style="color:var(--or);font-size:11px;text-decoration:none;border:1px solid var(--gris3);padding:3px 8px;border-radius:3px">🔗 Voir</a>';return '<tr onclick="open2('+i+')">'+'<td><span class="mono cor">'+esc(a.ref||'—')+'</span></td>'+'<td><div style="font-weight:500">'+esc(a.adresse||'—')+'</div><div class="cd">'+esc(a.ville)+'</div></td>'+'<td class="cd">'+esc(a.typeImmeuble||'—')+'</td>'+'<td class="cd">'+esc(a.nature||'—')+'</td>'+'<td class="mono">'+(a.surface?esc(a.surface)+' m²':'<span class="cd">—</span>')+'</td>'+'<td class="mono" style="font-size:11px;color:var(--dim)">'+(a.prixAffiche?fmt(parseFloat(a.prixAffiche)):'<span class="cd">—</span>')+'</td>'+'<td class="mono">'+(hp?fmt(parseFloat(a.prixOffre)):'<span class="cd">—</span>')+'</td>'+'<td class="mono cd">'+(hp?fmt(c.m2):'—')+'</td>'+'<td class="mono">'+(a.travaux?fmt(parseFloat(a.travaux)):'<span class="cd">—</span>')+'</td>'+'<td class="mono">'+(hp?fmt(c.tot):'<span class="cd">—</span>')+'</td>'+'<td class="mono" style="font-size:11px">'+rvH+'</td>'+'<td class="mono" style="font-size:11px">'+pvH+'</td>'+'<td class="mono" style="font-size:11px">'+mgH+'</td>'+'<td><span class="badge '+sclass(a.statut)+'">'+slabel(a.statut)+'</span></td>'+'<td>'+agH+'</td>'+'<td onclick="event.stopPropagation()">'+lnH+'</td>'+'</tr>';}).join('');}
 
-function open2(i){cur=JSON.parse(JSON.stringify(actifs[i]));isNew=false;showModal();}
+function open2(i){cur=JSON.parse(JSON.stringify(actifs[i]));if(!cur.visites)cur.visites=[];isNew=false;showModal();}
 function openNew(){var n=actifs.length+1;cur=vide();cur.ref='ACT-'+String(n).padStart(3,'0');isNew=true;showModal();}
 function closeModal(){E('modal').style.display='none';cur=null;}
 function resetActif(){if(!cur)return;if(cur.id===1){cur=JSON.parse(JSON.stringify(DEF));showModal();}else if(cur.id===2){cur=JSON.parse(JSON.stringify(ACT002));showModal();}else if(cur.id===3){cur=JSON.parse(JSON.stringify(ACT003));showModal();}else{cur=Object.assign(vide(),{id:cur.id,ref:cur.ref});showModal();}}
@@ -256,9 +270,40 @@ return h;}
 function inp(label,key,val,type,ph,sty){type=type||'text';ph=ph||'';sty=sty||'font-family:DM Mono,monospace';var sv=String(val||'').replace(/"/g,'&quot;');return '<div class="fld"><label>'+label+'</label><input type="'+type+'" value="'+sv+'" placeholder="'+ph+'" style="'+sty+'" oninput="set2(\''+key+'\',this.value)"/></div>';}
 function inp2(label,key,val,type,ph,sty){type=type||'text';ph=ph||'';sty=sty||'font-family:DM Mono,monospace';var sv=String(val||'').replace(/"/g,'&quot;');return '<div class="fld"><label>'+label+'</label><input type="'+type+'" value="'+sv+'" placeholder="'+ph+'" style="'+sty+'" oninput="set2Surface(\''+key+'\',this.value)"/></div>';}
 
+function addVisite(){
+  var ta=E('vst-draft');
+  if(!ta||!ta.value.trim())return;
+  if(!cur.visites)cur.visites=[];
+  cur.visites.unshift({id:Date.now(),date:todayISO(),commentaire:ta.value.trim()});
+  ta.value='';
+  refreshVisites();
+}
+function removeVisite(idx){
+  if(!cur.visites)return;
+  cur.visites.splice(idx,1);
+  refreshVisites();
+}
+function refreshVisites(){var el=E('zone-visites');if(el)el.innerHTML=buildVisitesBlock();}
+function buildVisitesBlock(){
+  var visites=cur.visites||[];
+  var h='<div class="vst">';
+  h+='<div class="vst-add"><textarea id="vst-draft" placeholder="Compte-rendu de la visite d\'aujourd\'hui…" rows="2"></textarea><button class="bp" type="button" onclick="addVisite()">+ Ajouter</button></div>';
+  if(visites.length===0){
+    h+='<div class="vst-empty">Aucune visite enregistrée pour ce bien.</div>';
+  }else{
+    h+='<div class="vst-list">';
+    visites.forEach(function(v,i){
+      h+='<div class="vst-card"><div class="vst-top"><span class="vst-date">'+fmtDateV(v.date)+'</span><button class="vst-del" type="button" onclick="removeVisite('+i+')">✕</button></div><div class="vst-comment">'+esc(v.commentaire)+'</div></div>';
+    });
+    h+='</div>';
+  }
+  h+='</div>';
+  return h;
+}
+
 function buildBody(){var a=cur;var ss=['offre','acceptee','refusee','suivi'];var h='';h+='<div><div class="st">Statut de l\'offre</div><div class="ss">';ss.forEach(function(s){h+='<div class="so'+(a.statut===s?' so-'+s:'')+'" onclick="setB(\'statut\',\''+s+'\')">'+slabel(s)+'</div>';});h+='</div></div>';h+='<div><div class="st">Descriptif du bien</div><div class="g3">'+inp('Référence','ref',a.ref,'text','','font-family:Sora,sans-serif')+inp('Nature','nature',a.nature,'text','Immeuble, Maison…','font-family:Sora,sans-serif')+inp("Type d'immeuble",'typeImmeuble',a.typeImmeuble||'','text','Haussmannien…','font-family:Sora,sans-serif')+inp('Adresse','adresse',a.adresse,'text','','font-family:Sora,sans-serif')+inp('Ville','ville',a.ville,'text','','font-family:Sora,sans-serif')+inp('Surface actuelle (m²)','surface',a.surface,'number')+inp('Surface après travaux (m²)','surfaceApres',a.surfaceApres,'number')+'</div></div>';h+='<div><div class="st">Surface Carrez / surface pondérée (combles, &lt;1,80m…)</div><div class="g3">'+inp2('Surface loi Carrez (m²)','surfaceCarrez',a.surfaceCarrez||'','number','ex: 80')+inp2('Surface non-Carrez à pondérer (m²)','surfacePonderee',a.surfacePonderee||'','number','ex: 40')+'<div class="fld"><label>Coefficient de pondération</label><select onchange="set2Surface(\'coeffPonderation\',this.value)" style="font-family:Sora,sans-serif">'+[0,10,20,30,40,50,60,70,80,90].map(function(v){return '<option value="'+v+'"'+(String(a.coeffPonderation)===String(v)?' selected':'')+'>'+v+' %</option>';}).join('')+'</select></div></div>'+'<div id="zone-surfacepond">'+buildSurfacePondInfo()+'</div>'+'<div style="font-size:11px;color:var(--dim);margin-top:6px">Ces surfaces servent à calculer le prix de revente pondéré ci-dessous (le non-Carrez se vend au prix/m² Carrez × coefficient).</div>'+'</div>';h+='<div><div class="st">Acquisition</div><div class="g3">'+inp('Prix affiché vendeur (€)','prixAffiche',a.prixAffiche||'','number')+inp("Prix d'offre (€)",'prixOffre',a.prixOffre,'number')+inp('Frais agence achat (%)','tauxAgenceAchat',a.tauxAgenceAchat,'number')+inp('Frais notaire (%)','tauxNotaire',a.tauxNotaire,'number')+inp('Travaux + mobilier (€)','travaux',a.travaux,'number')+inp('Frais bancaires (%/an)','tauxBancaire',a.tauxBancaire,'number')+inp('Hypothèque (%)','tauxHypotheque',a.tauxHypotheque,'number')+inp('Levée hypothèque (€)','fraisLeveeHypotheque',a.fraisLeveeHypotheque,'number')+inp('Frais SEP (%)','tauxSEP',a.tauxSEP,'number')+'</div></div>';h+='<div><div class="st">Frais courants</div><div class="g2">'+inp('Taxe foncière (€/an)','taxeFonciere',a.taxeFonciere,'number')+inp('Charges + électricité (€/an)','charges',a.charges,'number')+'</div></div>';var fs=[['geometre','coutGeometre','Géomètre (€)','996'],['ingenieurBeton','coutIngenieur','Ingénieur béton (€)',''],['age','coutAGE','AGE (€)',''],['rachatPartieCommune','coutRachat','Rachat partie commune (€)','1000'],['modificationRCP','coutRCP','Modification RCP (€)',''],['permisConstructire','coutPermis','Permis de construire (€)','']];h+='<div><div class="st">Frais spéciaux</div><div style="display:flex;flex-direction:column;gap:8px">';fs.forEach(function(f){h+='<div style="display:flex;align-items:center;gap:12px"><label class="cbr"><input type="checkbox" '+(a[f[0]]?'checked':'')+' onchange="setB(\''+f[0]+'\',this.checked)"> '+f[2]+'</label>';if(a[f[0]])h+='<div style="flex:1">'+inp('',f[1],a[f[1]],'number',f[3])+'</div>';h+='</div>';});h+='</div></div>';h+='<div><div class="st">Agent — Revente</div><div class="g3">'+inp("Nom de l'agence",'agenceNom',a.agenceNom||'','text','Agence XYZ','font-family:Sora,sans-serif')+inp('Commission (%)','agenceTauxCommission',a.agenceTauxCommission||'','number','ex: 4')+'<div class="fld"><label>Mandats à émettre</label><div class="dv" style="font-size:11px;color:var(--mid)">Voir ventilation des lots ci-dessous</div></div></div></div>';h+='<div><div class="st">Revente — Prix global (si pas de ventilation par lot)</div><div class="g3">'+inp('Prix conservateur (€)','prixReventeConservateur',a.prixReventeConservateur||'','number')+inp('Prix cible (€)','prixReventeCible',a.prixReventeCible||'','number')+inp('Frais agence revente (%)','tauxAgenceRevente',a.tauxAgenceRevente,'number')+'</div></div>';h+='<div><div class="st">Ventilation par lot — Scénario conservateur</div><div id="zone-lots-cons">'+buildLotsBlock('conservateur')+'</div></div>';h+='<div><div class="st">Ventilation par lot — Scénario cible</div><div id="zone-lots-cible">'+buildLotsBlock('cible')+'</div></div>';
 h+='<div><div class="st">Scénario — Division en lots (optionnel)</div><div class="g3">'+inp('Nombre de lots envisagés','nbLots',a.nbLots||'','number','ex: 4')+inp('Prix de vente total tous lots (€)','prixVenteLotsTotal',a.prixVenteLotsTotal||'','number','ex: 2400000')+inp('Coût de division estimé (€)','coutDivision',a.coutDivision||'','number','géomètre, copro, syndic…')+'</div></div>';
-h+='<div id="zone-calc">'+buildCalc()+'</div>';h+='<div><div class="st">Lien annonce</div><div class="fld"><label>URL</label><input type="url" value="'+esc(a.lienAnnonce||'')+'" placeholder="https://..." style="font-family:Sora,sans-serif" oninput="set2(\'lienAnnonce\',this.value)"/>';if(a.lienAnnonce)h+='<a href="'+esc(a.lienAnnonce)+'" target="_blank" style="color:var(--or);font-size:11px;margin-top:4px;display:inline-block">Ouvrir l&apos;annonce</a>';h+='</div></div>';h+='<div><div class="st">Notes</div><div class="fld"><textarea oninput="set2(\'notes\',this.value)">'+esc(a.notes||'')+'</textarea></div></div>';return h;}
+h+='<div id="zone-calc">'+buildCalc()+'</div>';h+='<div><div class="st">Comptes-rendus de visite</div><div id="zone-visites">'+buildVisitesBlock()+'</div></div>';h+='<div><div class="st">Lien annonce</div><div class="fld"><label>URL</label><input type="url" value="'+esc(a.lienAnnonce||'')+'" placeholder="https://..." style="font-family:Sora,sans-serif" oninput="set2(\'lienAnnonce\',this.value)"/>';if(a.lienAnnonce)h+='<a href="'+esc(a.lienAnnonce)+'" target="_blank" style="color:var(--or);font-size:11px;margin-top:4px;display:inline-block">Ouvrir l&apos;annonce</a>';h+='</div></div>';h+='<div><div class="st">Notes</div><div class="fld"><textarea oninput="set2(\'notes\',this.value)">'+esc(a.notes||'')+'</textarea></div></div>';return h;}
 
 var agentsDefs=[
   {id:5,num:'01',icon:'🔍',nom:"Chasseur d'opportunités",desc:'Scanne les annonces en temps réel selon vos critères de rentabilité MOVA.',status:'ok'},
